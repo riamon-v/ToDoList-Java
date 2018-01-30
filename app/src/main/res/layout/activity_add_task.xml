@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.riamon_v.todolist.AddTask">
+    tools:context="com.example.riamon_v.todolist.AddTask.AddTask">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -103,24 +103,14 @@
         app:layout_constraintVertical_bias="0.0" />
 
 
-    <!--<android.support.design.widget.FloatingActionButton
-        android:id="@+id/validateTask"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="76dp"
-        android:layout_marginRight="16dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_add_white_24dp" />-->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/validateTask"
         android:layout_width="65dp"
         android:layout_height="64dp"
         android:layout_marginBottom="24dp"
         android:layout_marginRight="24dp"
-        android:clickable="true"
-
+        android:onClick="validateTask"
+        android:clickable="false"
         app:backgroundTint="?attr/colorButtonNormal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
