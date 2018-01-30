@@ -1,6 +1,7 @@
 package com.example.riamon_v.todolist.AddTask;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,16 +15,18 @@ import android.widget.Spinner;
 
 import com.example.riamon_v.todolist.DatabaseManagment.DatabaseHandler;
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
+import com.example.riamon_v.todolist.MainActivity;
 import com.example.riamon_v.todolist.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class AddTask extends AppCompatActivity {
 
-    EditText title;
-    FloatingActionButton validate;
-    Spinner spinner;
+    private EditText title;
+    private FloatingActionButton validate;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,7 @@ public class AddTask extends AppCompatActivity {
         title = findViewById(R.id.title);
         validate = findViewById(R.id.validateTask);
         validate.setClickable(false);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = findViewById(R.id.spinner);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.list_choice, android.R.layout.simple_spinner_item);
@@ -77,7 +80,7 @@ public class AddTask extends AppCompatActivity {
         task.setContent(((EditText) findViewById(R.id.content)).getText().toString());
         task.setStatus(spinner.getSelectedItemPosition());
         try {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE);
             task.date = format.parse(((EditText) findViewById(R.id.date)).getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
