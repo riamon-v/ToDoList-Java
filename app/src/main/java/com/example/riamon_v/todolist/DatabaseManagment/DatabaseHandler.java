@@ -13,16 +13,14 @@ public abstract class DatabaseHandler extends RoomDatabase {
 
     public static DatabaseHandler getInstance(Context context) {
         if (instance == null) {
-            instance = create(context);
+            instance = Room.databaseBuilder(
+                    context.getApplicationContext(),
+                    DatabaseHandler.class,
+                    DB_NAME)
+                    .allowMainThreadQueries()
+                    .build();
         }
         return instance;
-    }
-
-    private static DatabaseHandler create(final Context context) {
-        return Room.databaseBuilder(
-                context,
-                DatabaseHandler.class,
-                DB_NAME).build();
     }
 
     public static void destroyInstance() {
