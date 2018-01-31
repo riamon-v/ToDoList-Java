@@ -24,4 +24,7 @@ public interface TasksDAO {
 
     @Query("SELECT * FROM tasks WHERE status = :s")
     public List<TaskCard> getTaskByStatus(int s);
+
+    @Query("SELECT * FROM tasks WHERE id = :id")
+    public TaskCard getTaskById(int id);
 }

@@ -13,13 +13,13 @@ import java.util.Date;
 public class TaskCard {
 
         @PrimaryKey (autoGenerate = true)
-        public int id;
+        private int id;
 
         private String title;
         private String content;
 
         @TypeConverters({DateConverter.class})
-        public Date date;
+        private Date date;
 
         private int status;
 
@@ -45,5 +45,21 @@ public class TaskCard {
 
         public void setContent(String content) {
                 this.content = content;
+        }
+
+        public int getId() {
+                return id;
+        }
+
+        public void setId(int id) {
+                this.id = id;
+        }
+
+        public Date getDate() {
+                return date;
+        }
+
+        public void setDate(Date date) {
+                this.date = date;
         }
 }

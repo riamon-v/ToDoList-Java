@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private List<TaskCard> tasks;//= new ArrayList<>();
-    private Map<Integer, String> stats;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -48,7 +47,13 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean setRightTask(int id) {
         tasks = DatabaseHandler.getInstance(MainActivity.this).getTaskDao().getTaskByStatus(id);
-        recyclerView.setAdapter(new AdapterCard(tasks));
+        recyclerView.setAdapter(new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
+            @Override
+            public void onItemClick(TaskCard item) {
+                editTask(item.getId());
+                //    Log.d("ID ITEM", ": " + item.getId());
+            }
+        }));
         return true;
     }
 
@@ -70,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         //puis créer un MyAdapter, lui fournir notre liste de villes.
         //cet adapter servira à remplir notre recyclerview
-        tasks = DatabaseHandler.getInstance(MainActivity.this).getTaskDao().getTaskByStatus(0);
-        recyclerView.setAdapter(new AdapterCard(tasks));
+        setRightTask(0);
 
         final FloatingActionButton button = findViewById(R.id.addTask);
         button.setOnClickListener(new View.OnClickListener() {
@@ -103,13 +107,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void addTask(View view) {
         Intent intent = new Intent(this, AddTask.class);
-        intent.putExtra("Intent", this.getIntent());
+        intent.putExtra("edit", -1);
+       // intent.putExtra("Intent", this.getIntent());
 /*        EditText editText = (EditText) findViewById(R.id.editText);
         String message = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);*/
         startActivity(intent);
     }
 
+    public void editTask(int idTask) {
+        Intent intent = new Intent(this, AddTask.class);
+        intent.putExtra("idTask", idTask);
+
+        startActivity(intent);
+    }
     /*public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
 

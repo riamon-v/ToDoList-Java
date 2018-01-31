@@ -17,11 +17,18 @@ import java.util.List;
 
 public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
 
-    List<TaskCard> list;
+    public interface OnItemClickListener {
+        void onItemClick(TaskCard item);
+    }
+
+    private List<TaskCard> list;
+    private OnItemClickListener listener;
+
 
     //ajouter un constructeur prenant en entrée une liste
-    public AdapterCard(List<TaskCard> list) {
+    public AdapterCard(List<TaskCard> list, OnItemClickListener listener) {
         this.list = list;
+        this.listener = listener;
     }
 
     //cette fonction permet de créer les viewHolder
@@ -36,7 +43,7 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
     @Override
     public void onBindViewHolder(CardHolder cardHolder, int position) {
         TaskCard task = list.get(position);
-        cardHolder.bind(task);
+        cardHolder.bind(task, listener);
     }
     @Override
     public int getItemCount() {
