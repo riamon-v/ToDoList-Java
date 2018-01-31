@@ -108,10 +108,7 @@ public class MainActivity extends AppCompatActivity {
     public void addTask(View view) {
         Intent intent = new Intent(this, AddTask.class);
         intent.putExtra("edit", -1);
-       // intent.putExtra("Intent", this.getIntent());
-/*        EditText editText = (EditText) findViewById(R.id.editText);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);*/
+
         startActivity(intent);
     }
 

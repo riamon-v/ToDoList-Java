@@ -1,13 +1,13 @@
 package com.example.riamon_v.todolist.AddTask;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -15,6 +15,7 @@ import android.widget.Spinner;
 
 import com.example.riamon_v.todolist.DatabaseManagment.DatabaseHandler;
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
+import com.example.riamon_v.todolist.MainActivity;
 import com.example.riamon_v.todolist.R;
 
 import java.text.ParseException;
@@ -72,8 +73,6 @@ public class AddTask extends AppCompatActivity {
                    validate.setClickable(false);
                    validate.getBackground().setColorFilter(0xFFD6D7D7, PorterDuff.Mode.SRC_ATOP);
                }
-                Log.d("EDIT", ": " + idTask);
-
             }
 
             @Override
@@ -88,6 +87,7 @@ public class AddTask extends AppCompatActivity {
         title.setText(task.getTitle());
         content.setText(task.getContent());
         date.setText(dateFormat.format(task.getDate()));
+        spinner.setSelection(task.getStatus());
 
         validate.setClickable(true);
         validate.getBackground().setColorFilter(0xFF99CC00, PorterDuff.Mode.SRC_ATOP);
@@ -99,7 +99,7 @@ public class AddTask extends AppCompatActivity {
     }
 
     public void validateTask(View v) {
-      //  task = new TaskCard();
+        Intent intent = new Intent(this, MainActivity.class);
 
         task.setTitle(title.getText().toString());
         task.setContent(content.getText().toString());
@@ -115,5 +115,7 @@ public class AddTask extends AppCompatActivity {
         else
             DatabaseHandler.getInstance(this).getTaskDao().updateTask(task);
         AddTask.this.finish();
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }
