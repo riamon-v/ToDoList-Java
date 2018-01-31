@@ -42,8 +42,8 @@ public class AddTask extends AppCompatActivity {
         title = findViewById(R.id.title);
         content = findViewById(R.id.content);
         date = findViewById(R.id.date);
-        validate = findViewById(R.id.validateTask);
-        validate.setClickable(false);
+       /* validate = findViewById(R.id.validateTask);
+        validate.setClickable(false);*/
         spinner = findViewById(R.id.spinner);
         idTask = getIntent().getIntExtra("idTask", -1);
 
@@ -57,7 +57,7 @@ public class AddTask extends AppCompatActivity {
         else
           setTaskEditable();
 
-        title.addTextChangedListener(new TextWatcher() {
+        /*title.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -79,7 +79,7 @@ public class AddTask extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
             }
-        });
+        });*/
     }
 
     private void setTaskEditable() {
@@ -110,7 +110,7 @@ public class AddTask extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (idTask > -1)
+        if (idTask == -1)
             DatabaseHandler.getInstance(this).getTaskDao().insertTask(task);
         else
             DatabaseHandler.getInstance(this).getTaskDao().updateTask(task);
