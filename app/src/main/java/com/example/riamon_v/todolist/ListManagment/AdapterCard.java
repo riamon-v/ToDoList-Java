@@ -49,4 +49,18 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
     public int getItemCount() {
         return list.size();
     }
+
+    public void removeItem(int position) {
+        list.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(TaskCard item, int position) {
+        list.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
 }

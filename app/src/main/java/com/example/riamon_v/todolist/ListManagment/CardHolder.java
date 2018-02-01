@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
@@ -19,8 +20,10 @@ public class CardHolder extends RecyclerView.ViewHolder {
     private TextView textViewView;
     private TextView dateViewView;
     private TextView contentViewView;
-    LinearLayout mLinearLayout;
-    Button drop;
+    public RelativeLayout viewBackground;
+    public LinearLayout viewForeground;
+    private LinearLayout mLinearLayout;
+    private Button drop;
 
     //itemView est la vue correspondante à 1 cellule
     public CardHolder(View itemView) {
@@ -34,6 +37,9 @@ public class CardHolder extends RecyclerView.ViewHolder {
         //set visibility to GONE
         mLinearLayout.setVisibility(View.GONE);
         drop = itemView.findViewById(R.id.drop);
+
+        viewBackground = itemView.findViewById(R.id.view_background);
+        viewForeground = itemView.findViewById(R.id.view_foreground);
     }
 
     private ValueAnimator slideAnimator(int start, int end) {

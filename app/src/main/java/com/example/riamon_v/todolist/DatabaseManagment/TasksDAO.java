@@ -22,8 +22,8 @@ public interface TasksDAO {
     @Delete
     public void deleteTask(TaskCard task);
 
-    @Query("SELECT * FROM tasks WHERE status = :s")
-    public List<TaskCard> getTaskByStatus(int s);
+    @Query("SELECT * FROM tasks WHERE status = :status")
+    public List<TaskCard> getTaskByStatus(int status);
 
     @Query("SELECT * FROM tasks WHERE id = :id")
     public TaskCard getTaskById(int id);

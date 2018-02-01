@@ -2,16 +2,13 @@ package com.example.riamon_v.todolist.AddTask;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.riamon_v.todolist.DatabaseManagment.DatabaseHandler;
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
@@ -29,7 +26,6 @@ public class AddTask extends AppCompatActivity {
     private EditText title;
     private EditText content;
     private EditText date;
-    private FloatingActionButton validate;
     private Spinner spinner;
     private int idTask;
     private TaskCard task;
@@ -42,8 +38,6 @@ public class AddTask extends AppCompatActivity {
         title = findViewById(R.id.title);
         content = findViewById(R.id.content);
         date = findViewById(R.id.date);
-       /* validate = findViewById(R.id.validateTask);
-        validate.setClickable(false);*/
         spinner = findViewById(R.id.spinner);
         idTask = getIntent().getIntExtra("idTask", -1);
 
@@ -88,9 +82,6 @@ public class AddTask extends AppCompatActivity {
         content.setText(task.getContent());
         date.setText(dateFormat.format(task.getDate()));
         spinner.setSelection(task.getStatus());
-
-        validate.setClickable(true);
-        validate.getBackground().setColorFilter(0xFF99CC00, PorterDuff.Mode.SRC_ATOP);
     }
 
     public void showDatePickerDialog(View v) {
@@ -101,7 +92,15 @@ public class AddTask extends AppCompatActivity {
     public void validateTask(View v) {
         Intent intent = new Intent(this, MainActivity.class);
 
-        task.setTitle(title.getText().toString());
+        if (title.getText().toString().replaceAll("\\s+", " ").length() == 0) {
+            Toast.makeText(getApplicationContext(), R.string.title_error, Toast.LENGTH_SHORT).show();
+            return ;
+        }
+        else if (date.getText().toString().replaceAll("\\s+", " ").length() == 0) {
+            Toast.makeText(getApplicationContext(), R.string.date_error, Toast.LENGTH_SHORT).show();
+            return ;
+        }
+        task.setTitle(title.getText().toString().replaceAll("\\s+", " "));
         task.setContent(content.getText().toString());
         task.setStatus(spinner.getSelectedItemPosition());
         try {
@@ -115,7 +114,7 @@ public class AddTask extends AppCompatActivity {
         else
             DatabaseHandler.getInstance(this).getTaskDao().updateTask(task);
         AddTask.this.finish();
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         startActivity(intent);
     }
 }

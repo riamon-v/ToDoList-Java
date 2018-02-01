@@ -1,14 +1,19 @@
 package com.example.riamon_v.todolist;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -16,17 +21,17 @@ import com.example.riamon_v.todolist.AddTask.AddTask;
 import com.example.riamon_v.todolist.DatabaseManagment.DatabaseHandler;
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
 import com.example.riamon_v.todolist.ListManagment.AdapterCard;
+import com.example.riamon_v.todolist.ListManagment.CardHolder;
+import com.example.riamon_v.todolist.ListManagment.RecyclerItemTouchHelper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-//android architecture
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private RecyclerView recyclerView;
-    private List<TaskCard> tasks;//= new ArrayList<>();
+    private AdapterCard adapter;
+    private List<TaskCard> tasks;
+    private ConstraintLayout container;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -45,18 +50,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private boolean setRightTask(int id) {
-        tasks = DatabaseHandler.getInstance(MainActivity.this).getTaskDao().getTaskByStatus(id);
-        recyclerView.setAdapter(new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
-            @Override
-            public void onItemClick(TaskCard item) {
-                editTask(item.getId());
-                //    Log.d("ID ITEM", ": " + item.getId());
-            }
-        }));
-        return true;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,50 +59,71 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         recyclerView = findViewById(R.id.recyclerView);
+        container = findViewById(R.id.container);
 
-        //définit l'agencement des cellules, ici de façon verticale, comme une ListView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        //pour adapter en grille comme une RecyclerView, avec 2 cellules par ligne
-        //recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
-        //puis créer un MyAdapter, lui fournir notre liste de villes.
-        //cet adapter servira à remplir notre recyclerview
         setRightTask(0);
+        adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
+            @Override
+            public void onItemClick(TaskCard item) {
+                editTask(item.getId());
+            }
+        });
+        recyclerView.setAdapter(adapter);
 
         final FloatingActionButton button = findViewById(R.id.addTask);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                addTask(v);
-                /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-
-                LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-
-                 builder.setTitle(R.string.title_popup)
-                         .setView(inflater.inflate(R.layout.add_task, null))
-                         .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int id) {
-                                 // sign in the user ...
-                             }
-                         })
-                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                             public void onClick(DialogInterface dialog, int id) {
-                                 //LoginDialogFragment.this.getDialog().cancel();
-                             }
-                         });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                // Code here executes on main thread after user presses button*/
+                editTask(-1);
+                MainActivity.this.finish();
             }
         });
     }
 
-    public void addTask(View view) {
-        Intent intent = new Intent(this, AddTask.class);
-        intent.putExtra("edit", -1);
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof CardHolder) {
+            String name = tasks.get(viewHolder.getAdapterPosition()).getTitle();
+            final TaskCard deletedItem = tasks.get(viewHolder.getAdapterPosition());
+            final int index = viewHolder.getAdapterPosition();
 
-        startActivity(intent);
+            // remove the item from recycler view
+            DatabaseHandler.getInstance(MainActivity.this).getTaskDao().deleteTask(deletedItem);
+            adapter.removeItem(index);
+
+            Snackbar snackbar = Snackbar
+                    .make(container, name + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    DatabaseHandler.getInstance(MainActivity.this).getTaskDao().insertTask(deletedItem);
+                    adapter.restoreItem(deletedItem, index);
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();
+        }
+    }
+
+    private boolean setRightTask(int id) {
+        tasks = DatabaseHandler.getInstance(MainActivity.this).getTaskDao().getTaskByStatus(id);
+
+        adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
+            @Override
+            public void onItemClick(TaskCard item) {
+                editTask(item.getId());
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        return true;
     }
 
     public void editTask(int idTask) {
@@ -118,11 +132,13 @@ public class MainActivity extends AppCompatActivity {
 
         startActivity(intent);
     }
-    /*public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
 
-        newFragment.show(MainActivity.this.getFragmentManager(), "dateTask");
-       // ((EditText) findViewById(R.id.date)).setText(((DatePickerFragment)newFragment).getDate());
+/*
+    public void reload() {
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
     }*/
 }
 
