@@ -3,12 +3,8 @@ package com.example.riamon_v.todolist.ListManagment;
 import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
-import android.support.v7.widget.helper.ItemTouchHelper;
-
-/**
- * Created by riamon_v on 01/02/2018.
- */
 
 public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     private RecyclerItemTouchHelperListener listener;

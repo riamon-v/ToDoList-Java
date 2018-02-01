@@ -9,6 +9,7 @@ import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
 import com.example.riamon_v.todolist.ListManagment.CardHolder;
 import com.example.riamon_v.todolist.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
         void onItemClick(TaskCard item);
     }
 
-    private List<TaskCard> list;
+    private List<TaskCard> list = new ArrayList<>();
     private OnItemClickListener listener;
 
 
@@ -62,5 +63,16 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
         list.add(position, item);
         // notify item added by position
         notifyItemInserted(position);
+    }
+
+    public void swap(List newList){
+        if (list != null) {
+            list.clear();
+            list.addAll(newList);
+        }
+        else {
+            list = newList;
+        }
+        notifyDataSetChanged();
     }
 }

@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.riamon_v.todolist.AddTask.AddTask">
 
-
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="88dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -55,24 +54,59 @@
                 android:inputType="textMultiLine" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
 
             <EditText
                 android:id="@+id/date"
-                android:layout_width="match_parent"
+                android:layout_width="338dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_weight="1"
                 android:clickable="true"
                 android:focusable="false"
                 android:fontFamily="sans-serif"
                 android:hint="@string/Date"
                 android:onClick="showDatePickerDialog" />
-        </android.support.design.widget.TextInputLayout>
+
+            <EditText
+                android:id="@+id/time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:focusable="false"
+                android:fontFamily="sans-serif"
+                android:hint="@string/Time"
+                android:onClick="showTimePickerDialog" />
+
+        </LinearLayout>
+        <!-- <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/date"
+                    android:layout_width="138dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:fontFamily="sans-serif"
+                    android:hint="@string/Date"
+                    android:onClick="showDatePickerDialog" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>-->
     </LinearLayout>
 
     <Spinner
@@ -80,7 +114,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -105,8 +139,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/validateTask"
-        android:layout_width="65dp"
-        android:layout_height="64dp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
         android:layout_marginBottom="24dp"
         android:layout_marginRight="24dp"
         android:onClick="validateTask"

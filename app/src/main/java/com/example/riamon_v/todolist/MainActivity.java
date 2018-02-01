@@ -14,6 +14,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     private AdapterCard adapter;
     private List<TaskCard> tasks;
     private ConstraintLayout container;
+    private int idOldStatus = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
         setRightTask(0);
@@ -81,9 +83,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 editTask(-1);
-                MainActivity.this.finish();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRightTask(idOldStatus);
     }
 
     @Override
@@ -93,29 +100,39 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             final TaskCard deletedItem = tasks.get(viewHolder.getAdapterPosition());
             final int index = viewHolder.getAdapterPosition();
 
-            // remove the item from recycler view
-            DatabaseHandler.getInstance(MainActivity.this).getTaskDao().deleteTask(deletedItem);
-            adapter.removeItem(index);
+            if (direction == ItemTouchHelper.LEFT || (direction == ItemTouchHelper.RIGHT && deletedItem.getStatus() == 2)) {
+                // remove the item from recycler view
+                DatabaseHandler.getInstance(MainActivity.this).getTaskDao().deleteTask(deletedItem);
+                adapter.removeItem(index);
 
-            Snackbar snackbar = Snackbar
-                    .make(container, name + " removed from cart!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                Snackbar snackbar = Snackbar
+                        .make(container, name + " removed from cards !", Snackbar.LENGTH_LONG);
+                snackbar.setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                    // undo is selected, restore the deleted item
-                    DatabaseHandler.getInstance(MainActivity.this).getTaskDao().insertTask(deletedItem);
-                    adapter.restoreItem(deletedItem, index);
-                }
-            });
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
+                        // undo is selected, restore the deleted item
+                        DatabaseHandler.getInstance(MainActivity.this).getTaskDao().insertTask(deletedItem);
+                        adapter.restoreItem(deletedItem, index);
+                    }
+                });
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+            }
+            else if (direction == ItemTouchHelper.RIGHT) {
+                TaskCard test = tasks.get(viewHolder.getAdapterPosition());
+                test.setStatus(test.getStatus() + 1);
+                DatabaseHandler.getInstance(MainActivity.this).getTaskDao().updateTask(test);
+                adapter.removeItem(index);
+            }
         }
     }
 
     private boolean setRightTask(int id) {
         tasks = DatabaseHandler.getInstance(MainActivity.this).getTaskDao().getTaskByStatus(id);
-
+        /*if (adapter != null) {
+            adapter.swap(tasks);
+        }*/
         adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
             @Override
             public void onItemClick(TaskCard item) {
@@ -123,7 +140,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             }
         });
         recyclerView.setAdapter(adapter);
-        return true;
+        idOldStatus = id;
+       return true;
     }
 
     public void editTask(int idTask) {
@@ -133,12 +151,5 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         startActivity(intent);
     }
 
-/*
-    public void reload() {
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-    }*/
 }
 

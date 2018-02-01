@@ -9,7 +9,9 @@
     <string name="Title">Title</string>
     <string name="Content">Content</string>
     <string name="Date">Date</string>
+    <string name="Time">Time</string>
     <string name="delete">DELETE</string>
+    <string name="undo">UNDO</string>
     <string name="date_error">Please set a date for your task</string>
     <string name="title_error">Please set a title for your task</string>
     <string-array name="list_choice">

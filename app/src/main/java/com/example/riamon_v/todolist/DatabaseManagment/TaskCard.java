@@ -19,6 +19,7 @@ public class TaskCard {
         @TypeConverters({DateConverter.class})
         private Date date;
 
+        private String time;
         private int status;
 
         public int getStatus() {
@@ -59,5 +60,13 @@ public class TaskCard {
 
         public void setDate(Date date) {
                 this.date = date;
+        }
+
+        public String getTime() {
+                return time;
+        }
+
+        public void setTime(String time) {
+                this.time = time;
         }
 }

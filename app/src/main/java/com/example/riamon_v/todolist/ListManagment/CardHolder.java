@@ -104,9 +104,10 @@ public class CardHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onClick(View v) {
-                if (mLinearLayout.getVisibility()==View.GONE){
+                if (mLinearLayout.getVisibility() == View.GONE){
                     expand();
-                }else{
+                }
+                else {
                     collapse();
                 }
             }
@@ -120,9 +121,9 @@ public class CardHolder extends RecyclerView.ViewHolder {
         });
        textViewView.setText(item.getTitle());
        dateViewView.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(item.getDate()));
+       dateViewView.setText(dateViewView.getText() + " at " + item.getTime());
        contentViewView.setText(item.getContent());
     }
-
 
 }
 

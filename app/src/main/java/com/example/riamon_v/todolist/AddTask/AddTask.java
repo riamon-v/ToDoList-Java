@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.riamon_v.todolist.DatabaseManagment.DatabaseHandler;
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
@@ -26,6 +27,7 @@ public class AddTask extends AppCompatActivity {
     private EditText title;
     private EditText content;
     private EditText date;
+    private EditText time;
     private Spinner spinner;
     private int idTask;
     private TaskCard task;
@@ -38,6 +40,7 @@ public class AddTask extends AppCompatActivity {
         title = findViewById(R.id.title);
         content = findViewById(R.id.content);
         date = findViewById(R.id.date);
+        time = findViewById(R.id.time);
         spinner = findViewById(R.id.spinner);
         idTask = getIntent().getIntExtra("idTask", -1);
 
@@ -50,30 +53,6 @@ public class AddTask extends AppCompatActivity {
             task = new TaskCard();
         else
           setTaskEditable();
-
-        /*title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-              if (title.getText().length() > 0) {
-                   validate.setClickable(true);
-                   validate.getBackground().setColorFilter(0xFF99CC00, PorterDuff.Mode.SRC_ATOP);
-               }
-                else {
-                   validate.setClickable(false);
-                   validate.getBackground().setColorFilter(0xFFD6D7D7, PorterDuff.Mode.SRC_ATOP);
-               }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });*/
     }
 
     private void setTaskEditable() {
@@ -81,6 +60,7 @@ public class AddTask extends AppCompatActivity {
         title.setText(task.getTitle());
         content.setText(task.getContent());
         date.setText(dateFormat.format(task.getDate()));
+        time.setText(task.getTime());
         spinner.setSelection(task.getStatus());
     }
 
@@ -89,9 +69,12 @@ public class AddTask extends AppCompatActivity {
         newFragment.show(AddTask.this.getFragmentManager(), "dateTask");
     }
 
-    public void validateTask(View v) {
-        Intent intent = new Intent(this, MainActivity.class);
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(AddTask.this.getFragmentManager(), "timeTask");
+    }
 
+    public void validateTask(View v) {
         if (title.getText().toString().replaceAll("\\s+", " ").length() == 0) {
             Toast.makeText(getApplicationContext(), R.string.title_error, Toast.LENGTH_SHORT).show();
             return ;
@@ -103,8 +86,9 @@ public class AddTask extends AppCompatActivity {
         task.setTitle(title.getText().toString().replaceAll("\\s+", " "));
         task.setContent(content.getText().toString());
         task.setStatus(spinner.getSelectedItemPosition());
+        task.setTime(time.getText().toString());
         try {
-            task.setDate(dateFormat.parse(date.getText().toString()));
+            task.setDate(dateFormat.parse(date.getText().toString()));// + time.getText().toString()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -114,7 +98,5 @@ public class AddTask extends AppCompatActivity {
         else
             DatabaseHandler.getInstance(this).getTaskDao().updateTask(task);
         AddTask.this.finish();
-
-        startActivity(intent);
-    }
+  }
 }
