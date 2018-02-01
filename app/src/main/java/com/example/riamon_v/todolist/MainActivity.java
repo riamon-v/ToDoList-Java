@@ -14,7 +14,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -60,16 +59,17 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        recyclerView = findViewById(R.id.recyclerView);
         container = findViewById(R.id.container);
-
+        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
+        //init swipe animation
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
 
+        //set task to do in i first page
         setRightTask(0);
         adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
             @Override
@@ -101,17 +101,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             final int index = viewHolder.getAdapterPosition();
 
             if (direction == ItemTouchHelper.LEFT || (direction == ItemTouchHelper.RIGHT && deletedItem.getStatus() == 2)) {
-                // remove the item from recycler view
                 DatabaseHandler.getInstance(MainActivity.this).getTaskDao().deleteTask(deletedItem);
                 adapter.removeItem(index);
 
                 Snackbar snackbar = Snackbar
-                        .make(container, name + " removed from cards !", Snackbar.LENGTH_LONG);
+                        .make(container, name + R.string.deleteMessage, Snackbar.LENGTH_LONG);
                 snackbar.setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        // undo is selected, restore the deleted item
                         DatabaseHandler.getInstance(MainActivity.this).getTaskDao().insertTask(deletedItem);
                         adapter.restoreItem(deletedItem, index);
                     }
@@ -120,9 +117,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                 snackbar.show();
             }
             else if (direction == ItemTouchHelper.RIGHT) {
-                TaskCard test = tasks.get(viewHolder.getAdapterPosition());
-                test.setStatus(test.getStatus() + 1);
-                DatabaseHandler.getInstance(MainActivity.this).getTaskDao().updateTask(test);
+                TaskCard stTask = tasks.get(viewHolder.getAdapterPosition());
+                stTask.setStatus(stTask.getStatus() + 1);
+                DatabaseHandler.getInstance(MainActivity.this).getTaskDao().updateTask(stTask);
                 adapter.removeItem(index);
             }
         }

@@ -6,30 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
-import com.example.riamon_v.todolist.ListManagment.CardHolder;
 import com.example.riamon_v.todolist.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by riamon_v on 30/01/2018.
- */
-
 public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
-
-    public interface OnItemClickListener {
-        void onItemClick(TaskCard item);
-    }
 
     private List<TaskCard> list = new ArrayList<>();
     private OnItemClickListener listener;
 
-
-    //ajouter un constructeur prenant en entrée une liste
     public AdapterCard(List<TaskCard> list, OnItemClickListener listener) {
         this.list = list;
         this.listener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(TaskCard item);
     }
 
     //cette fonction permet de créer les viewHolder
@@ -53,19 +46,14 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
 
     public void removeItem(int position) {
         list.remove(position);
-        // notify the item removed by position
-        // to perform recycler view delete animations
-        // NOTE: don't call notifyDataSetChanged()
         notifyItemRemoved(position);
     }
 
     public void restoreItem(TaskCard item, int position) {
         list.add(position, item);
-        // notify item added by position
         notifyItemInserted(position);
     }
-
-    public void swap(List newList){
+    /*public void swap(List newList){
         if (list != null) {
             list.clear();
             list.addAll(newList);
@@ -74,5 +62,5 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
             list = newList;
         }
         notifyDataSetChanged();
-    }
+    }*/
 }

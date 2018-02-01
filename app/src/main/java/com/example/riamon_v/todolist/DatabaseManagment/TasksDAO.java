@@ -14,17 +14,17 @@ import java.util.List;
 public interface TasksDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insertTask(TaskCard task);
+    void insertTask(TaskCard task);
 
     @Update
-    public void updateTask(TaskCard task);
+    void updateTask(TaskCard task);
 
     @Delete
-    public void deleteTask(TaskCard task);
+    void deleteTask(TaskCard task);
 
     @Query("SELECT * FROM tasks WHERE status = :status")
-    public List<TaskCard> getTaskByStatus(int status);
+    List<TaskCard> getTaskByStatus(int status);
 
     @Query("SELECT * FROM tasks WHERE id = :id")
-    public TaskCard getTaskById(int id);
+    TaskCard getTaskById(int id);
 }

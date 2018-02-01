@@ -1,7 +1,6 @@
 package com.example.riamon_v.todolist.AddTask;
 
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,11 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.riamon_v.todolist.DatabaseManagment.DatabaseHandler;
 import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
-import com.example.riamon_v.todolist.MainActivity;
 import com.example.riamon_v.todolist.R;
 
 import java.text.ParseException;
@@ -79,7 +76,7 @@ public class AddTask extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), R.string.title_error, Toast.LENGTH_SHORT).show();
             return ;
         }
-        else if (date.getText().toString().replaceAll("\\s+", " ").length() == 0) {
+        else if (date.getText().toString().length() == 0) {
             Toast.makeText(getApplicationContext(), R.string.date_error, Toast.LENGTH_SHORT).show();
             return ;
         }

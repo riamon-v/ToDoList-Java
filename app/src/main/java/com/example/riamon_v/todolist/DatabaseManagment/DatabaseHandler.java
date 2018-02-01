@@ -9,7 +9,7 @@ import android.content.Context;
 public abstract class DatabaseHandler extends RoomDatabase {
 
     private static final String DB_NAME = "tasksDatabase.db";
-    private static /*volatile*/ DatabaseHandler instance;
+    private static DatabaseHandler instance;
 
     public static DatabaseHandler getInstance(Context context) {
         if (instance == null) {
@@ -21,10 +21,6 @@ public abstract class DatabaseHandler extends RoomDatabase {
                     .build();
         }
         return instance;
-    }
-
-    public static void destroyInstance() {
-        instance = null;
     }
 
     public abstract TasksDAO getTaskDao();
