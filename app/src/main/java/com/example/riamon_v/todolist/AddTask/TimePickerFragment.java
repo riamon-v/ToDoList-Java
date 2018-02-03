@@ -30,6 +30,12 @@ public class TimePickerFragment extends DialogFragment
                 DateFormat.is24HourFormat(getActivity()));
     }
 
+    /**
+     * set the time in the appropriate field
+     * @param view
+     * @param hourOfDay
+     * @param minute
+     */
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         editText.setText(new StringBuilder().append(hourOfDay).append(":").append(minute));
     }

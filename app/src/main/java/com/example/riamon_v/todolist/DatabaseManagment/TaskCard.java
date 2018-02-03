@@ -6,7 +6,9 @@ import android.arch.persistence.room.TypeConverters;
 
 import java.util.Date;
 
-
+/**
+ * Task object in database
+ */
 @Entity (tableName = "tasks")
 public class TaskCard {
 

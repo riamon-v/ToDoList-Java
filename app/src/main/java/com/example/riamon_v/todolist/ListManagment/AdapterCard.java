@@ -39,28 +39,29 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
         TaskCard task = list.get(position);
         cardHolder.bind(task, listener);
     }
+
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    /**
+     * remove task
+     * @param position
+     */
     public void removeItem(int position) {
         list.remove(position);
         notifyItemRemoved(position);
     }
 
+    /**
+     * restor task when undo
+     * @param item the task
+     * @param position position in adapter
+     */
     public void restoreItem(TaskCard item, int position) {
         list.add(position, item);
         notifyItemInserted(position);
     }
-    /*public void swap(List newList){
-        if (list != null) {
-            list.clear();
-            list.addAll(newList);
-        }
-        else {
-            list = newList;
-        }
-        notifyDataSetChanged();
-    }*/
+
 }

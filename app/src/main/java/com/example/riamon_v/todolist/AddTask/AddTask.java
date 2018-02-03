@@ -27,7 +27,7 @@ public class AddTask extends AppCompatActivity {
     private EditText time;
     private Spinner spinner;
     private int idTask;
-    private TaskCard task;
+    protected TaskCard task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,9 @@ public class AddTask extends AppCompatActivity {
           setTaskEditable();
     }
 
+    /**
+     * set all the data of the task in the fields
+     */
     private void setTaskEditable() {
         task = DatabaseHandler.getInstance(this).getTaskDao().getTaskById(idTask);
         title.setText(task.getTitle());
@@ -61,24 +64,37 @@ public class AddTask extends AppCompatActivity {
         spinner.setSelection(task.getStatus());
     }
 
+    /**
+     * show the calendar to set the date
+     * @param v View
+     */
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(AddTask.this.getFragmentManager(), "dateTask");
     }
 
+    /**
+     * show the clock to set the time
+     * @param v View
+     */
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(AddTask.this.getFragmentManager(), "timeTask");
     }
 
-    public void validateTask(View v) {
+    /**
+     * validate the task to add or to edit
+     * @param v View
+     * @return true
+     */
+    public boolean validateTask(View v) {
         if (title.getText().toString().replaceAll("\\s+", " ").length() == 0) {
             Toast.makeText(getApplicationContext(), R.string.title_error, Toast.LENGTH_SHORT).show();
-            return ;
+            return false;
         }
         else if (date.getText().toString().length() == 0) {
             Toast.makeText(getApplicationContext(), R.string.date_error, Toast.LENGTH_SHORT).show();
-            return ;
+            return false;
         }
         task.setTitle(title.getText().toString().replaceAll("\\s+", " "));
         task.setContent(content.getText().toString());
@@ -95,5 +111,7 @@ public class AddTask extends AppCompatActivity {
         else
             DatabaseHandler.getInstance(this).getTaskDao().updateTask(task);
         AddTask.this.finish();
+        return true;
   }
+
 }

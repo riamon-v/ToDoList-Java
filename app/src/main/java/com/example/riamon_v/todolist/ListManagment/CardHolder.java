@@ -57,6 +57,9 @@ public class CardHolder extends RecyclerView.ViewHolder {
         return animator;
     }
 
+    /**
+     * Down the content
+     */
     private void expand() {
         mLinearLayout.setVisibility(View.VISIBLE);
 
@@ -68,6 +71,9 @@ public class CardHolder extends RecyclerView.ViewHolder {
         mAnimator.start();
     }
 
+    /**
+     * Hide the content
+     */
     private void collapse() {
         int finalHeight = mLinearLayout.getHeight();
 
@@ -97,7 +103,11 @@ public class CardHolder extends RecyclerView.ViewHolder {
         mAnimator.start();
     }
 
-    //puis ajouter une fonction pour remplir la cellule en fonction d'un MyObject
+    /**
+     * Bind the "See more" button on a task item
+     * @param item
+     * @param listener
+     */
     public void bind(final TaskCard item, final AdapterCard.OnItemClickListener listener){
 
         drop.setOnClickListener(new View.OnClickListener() {
@@ -119,10 +129,10 @@ public class CardHolder extends RecyclerView.ViewHolder {
                 listener.onItemClick(item);
             }
         });
-       textViewView.setText(item.getTitle());
-       dateViewView.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(item.getDate()));
-       dateViewView.setText(dateViewView.getText() + " at " + item.getTime());
-       contentViewView.setText(item.getContent());
+        textViewView.setText(item.getTitle());
+        dateViewView.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(item.getDate()));
+        dateViewView.setText(dateViewView.getText() + " at " + item.getTime());
+        contentViewView.setText(item.getContent());
     }
 
 }

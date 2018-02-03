@@ -125,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         }
     }
 
+    /**
+     * Get all the tasks corresponding to the status
+     * @param id is the status of the task
+     * @return true
+     */
     private boolean setRightTask(int id) {
         tasks = DatabaseHandler.getInstance(MainActivity.this).getTaskDao().getTaskByStatus(id);
         /*if (adapter != null) {
@@ -141,6 +146,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
        return true;
     }
 
+    /**
+     * Start AddTask activity and send id of a task
+     * @param idTask is he id of the tasks want to edit
+     */
     public void editTask(int idTask) {
         Intent intent = new Intent(this, AddTask.class);
         intent.putExtra("idTask", idTask);

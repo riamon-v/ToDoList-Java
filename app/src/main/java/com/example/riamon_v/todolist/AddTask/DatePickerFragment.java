@@ -29,6 +29,13 @@ public class DatePickerFragment extends DialogFragment
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
+    /**
+     * set the time in the appropriate field
+     * @param view
+     * @param year
+     * @param month
+     * @param day
+     */
     public void onDateSet(DatePicker view, int year, int month, int day) {
         editText.setText(new StringBuilder().append(day).append("/").append(month + 1).append("/").append(year));
     }
