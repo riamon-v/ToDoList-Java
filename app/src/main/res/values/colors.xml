@@ -3,11 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="primary">#ff9800</color>
+    <color name="primary_dark">#f57c00</color>
+    <color name="primary_darker">#CC1D1D</color>
+    <color name="accent">#AAAAAA</color>
    <!-- <resources>
         <color name="colorPrimary">#111</color>
         <color name="colorPrimaryDark">#FFF</color>
         <color name="colorAccent">#ea3732</color>-->
-        <color name="bg_row_background">#fa315b</color>
+        <color name="bg_row_background">#CC1D1D</color>
         <color name="item_name">#535353</color>
         <color name="description">#a9a9a9</color>
  <!--   </resources>-->

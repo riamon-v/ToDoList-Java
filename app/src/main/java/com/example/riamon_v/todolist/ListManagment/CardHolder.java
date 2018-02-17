@@ -5,14 +5,13 @@ import android.animation.ValueAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
 import com.example.riamon_v.todolist.R;
 
-import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -23,7 +22,7 @@ public class CardHolder extends RecyclerView.ViewHolder {
    // public RelativeLayout viewBackground;
     public LinearLayout viewForeground;
     private LinearLayout mLinearLayout;
-    private Button drop;
+    private ImageButton drop;
 
     //itemView est la vue correspondante à 1 cellule
     public CardHolder(View itemView) {
@@ -115,9 +114,11 @@ public class CardHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 if (mLinearLayout.getVisibility() == View.GONE){
+                    drop.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
                     expand();
                 }
                 else {
+                    drop.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
                     collapse();
                 }
             }
