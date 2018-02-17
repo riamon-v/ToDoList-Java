@@ -15,10 +15,12 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
 
     private List<TaskCard> list = new ArrayList<>();
     private OnItemClickListener listener;
+    private boolean expand;
 
-    public AdapterCard(List<TaskCard> list, OnItemClickListener listener) {
+    public AdapterCard(List<TaskCard> list, OnItemClickListener listener, boolean expand) {
         this.list = list;
         this.listener = listener;
+        this.expand = expand;
     }
 
     public interface OnItemClickListener {
@@ -37,7 +39,10 @@ public class AdapterCard extends RecyclerView.Adapter<CardHolder> {
     @Override
     public void onBindViewHolder(CardHolder cardHolder, int position) {
         TaskCard task = list.get(position);
-        cardHolder.bind(task, listener);
+        if (!expand)
+            cardHolder.bind(task, listener);
+        else
+            cardHolder.bind2(task, listener);
     }
 
     @Override

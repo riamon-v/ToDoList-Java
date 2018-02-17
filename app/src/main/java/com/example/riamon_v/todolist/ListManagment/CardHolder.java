@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
 import com.example.riamon_v.todolist.R;
 
+import com.example.riamon_v.todolist.DatabaseManagment.TaskCard;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -20,7 +20,7 @@ public class CardHolder extends RecyclerView.ViewHolder {
     private TextView textViewView;
     private TextView dateViewView;
     private TextView contentViewView;
-    public RelativeLayout viewBackground;
+   // public RelativeLayout viewBackground;
     public LinearLayout viewForeground;
     private LinearLayout mLinearLayout;
     private Button drop;
@@ -38,7 +38,7 @@ public class CardHolder extends RecyclerView.ViewHolder {
         mLinearLayout.setVisibility(View.GONE);
         drop = itemView.findViewById(R.id.drop);
 
-        viewBackground = itemView.findViewById(R.id.view_background);
+       // viewBackground = itemView.findViewById(R.id.view_background);
         viewForeground = itemView.findViewById(R.id.view_foreground);
     }
 
@@ -122,6 +122,22 @@ public class CardHolder extends RecyclerView.ViewHolder {
                 }
             }
         });
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onItemClick(item);
+            }
+        });
+        textViewView.setText(item.getTitle());
+        dateViewView.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(item.getDate()));
+        dateViewView.setText(dateViewView.getText() + " at " + item.getTime());
+        contentViewView.setText(item.getContent());
+    }
+
+    public void bind2(final TaskCard item, final AdapterCard.OnItemClickListener listener){
+
+        expand();
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

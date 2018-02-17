@@ -11,9 +11,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     private AdapterCard adapter;
     private List<TaskCard> tasks;
     private ConstraintLayout container;
+    private boolean isClickGrid = false;
     private int idOldStatus = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
 
         container = findViewById(R.id.container);
         recyclerView = findViewById(R.id.recyclerView);
+        //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
             public void onItemClick(TaskCard item) {
                 editTask(item.getId());
             }
-        });
+        }, false);
         recyclerView.setAdapter(adapter);
 
         final FloatingActionButton button = findViewById(R.id.addTask);
@@ -94,6 +99,28 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            /*case R.id.action_settings:
+                break ;
+            */case R.id.action_grid:
+                item.setIcon(!isClickGrid ? R.drawable.ic_view_stream_white_24dp : R.drawable.ic_view_module_white_24dp);
+                switchDisposition();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof CardHolder) {
             String name = tasks.get(viewHolder.getAdapterPosition()).getTitle();
@@ -105,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
                 adapter.removeItem(index);
 
                 Snackbar snackbar = Snackbar
-                        .make(container, name + R.string.deleteMessage, Snackbar.LENGTH_LONG);
+                        .make(container, name + getString(R.string.deleteMessage), Snackbar.LENGTH_LONG);
                 snackbar.setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -125,6 +152,33 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         }
     }
 
+    private void switchDisposition() {
+        isClickGrid = !isClickGrid;
+
+        if (isClickGrid) {
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
+                @Override
+                public void onItemClick(TaskCard item) {
+                    editTask(item.getId());
+                }
+            }, true);
+        }
+        else {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
+                @Override
+                public void onItemClick(TaskCard item) {
+                    editTask(item.getId());
+                }
+            }, false);
+        }
+     /*   recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        adapter.notifyDataSetChanged();*/
+     recyclerView.setAdapter(adapter);
+    }
+
     /**
      * Get all the tasks corresponding to the status
      * @param id is the status of the task
@@ -135,12 +189,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
         /*if (adapter != null) {
             adapter.swap(tasks);
         }*/
-        adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
+        if (isClickGrid == true)
+            adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
             @Override
             public void onItemClick(TaskCard item) {
                 editTask(item.getId());
             }
-        });
+        }, true);
+        else
+            adapter = new AdapterCard(tasks, new AdapterCard.OnItemClickListener() {
+                @Override
+                public void onItemClick(TaskCard item) {
+                    editTask(item.getId());
+                }
+            }, false);
         recyclerView.setAdapter(adapter);
         idOldStatus = id;
        return true;
@@ -152,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemTouch
      */
     public void editTask(int idTask) {
         Intent intent = new Intent(this, AddTask.class);
-        intent.putExtra("idTask", idTask);
+            intent.putExtra("idTask", idTask);
 
         startActivity(intent);
     }

@@ -36,6 +36,7 @@
         android:id="@+id/view_foreground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
         android:background="#FFF"
         android:orientation="vertical"
         android:paddingBottom="0dp"
@@ -72,7 +73,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:background="?attr/colorButtonNormal" />
-            
+
             <TextView
                 android:id="@+id/contentCard"
                 android:layout_width="match_parent"
